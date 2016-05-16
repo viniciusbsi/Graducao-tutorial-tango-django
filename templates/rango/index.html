@@ -1,0 +1,62 @@
+{% extends 'rango/base.html' %}
+
+{% load staticfiles %}
+
+{% block body_block %}
+
+    <h2>5 Categorias mais curtidas - <a href="{% url 'rango:categories' %}">Todas</a></h2>
+    
+    {% if categories %}
+        <ul>
+    {% for category in categories %}
+        <li><a href="{% url 'rango:category' category.slug %}">{{ category.name }}</a></li>
+    {% endfor %}
+        </ul>
+    {% else %}
+        <strong>Sem categorias.</strong>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'rango:add_category' %}">Adicionar categoria</a></p>
+    {% endif %}
+
+    ====================================================
+    
+    {% if pages %}
+        <h2>5 Páginas mais acessadas por número de visualizações</h2>
+
+        <table style="text-align:left">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Visualizações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for page in pages %}
+                    <tr>
+                        <td><a href="{{ page.url }}">{{ page.title }}</a></td>
+                        <td>{{ page.views }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>                
+        </table>
+    {% endif %}
+    <br/> 
+
+    ====================================================
+
+    {% if latest_question_list %}
+        <h2>5 Questões por ordem de data de publicação</h2>
+        
+        <ul>
+        {% for question in latest_question_list %}
+            <li><a href="{% url 'rango:detail' question.id %}">{{ question.question_text }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No polls are available.</p>
+    {% endif %}
+
+{% endblock %}
